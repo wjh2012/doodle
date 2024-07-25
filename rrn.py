@@ -584,7 +584,7 @@ ocr_results2 = [
                 "x2": 536,
                 "y2": 328
             },
-            "text": "770830",
+            "text": "970501",
             "score": [
                 0.2968575799523399
             ]
@@ -597,7 +597,7 @@ ocr_results2 = [
                 "x2": 675,
                 "y2": 328
             },
-            "text": "1640364",
+            "text": "1017521",
             "score": [
                 0.9849818733916358
             ]
@@ -624,28 +624,33 @@ def find_rrn(data):
                 flag = True
             elif idx > 0 and len(cur_text) == 7 and cur_text.isdigit() and flag is True:
                 left_text = grouped_results[group][idx-1]['text']
+                rrn = left_text+cur_text
+                validate_rrn(rrn)
                 flag=False
             else:
                 flag=False
             
-def validate_rrn(numbers):
+def validate_rrn(str):
+    numbers = [int(char) for char in str]
     weights = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5]
     n_sum = sum(num * weight for num, weight in zip(numbers[:12], weights))
-    
     result = (11 - (n_sum % 11)) % 10
-    
-    return numbers[12] == result
+    print(numbers[12] == result) 
 
 start_time = time.perf_counter() 
 find_rrn(ocr_results)
 end_time = time.perf_counter()  
-execution_time = end_time - start_time  # 소요 시간 계산
-print(f"1 execution time: {execution_time:.9f} seconds")
-
+execution_time = end_time - start_time 
+print(f"execution time: {execution_time:.9f} seconds")
 
 start_time = time.perf_counter() 
-num_string = "9705011017521"
-print(validate_rrn2([int(char) for char in num_string]))
+find_rrn(ocr_results2)
 end_time = time.perf_counter()  
-execution_time = end_time - start_time  # 소요 시간 계산
-print(f"2 execution time: {execution_time:.9f} seconds")
+execution_time = end_time - start_time
+print(f"execution time: {execution_time:.9f} seconds")
+
+start_time = time.perf_counter() 
+validate_rrn("9705011017521")
+end_time = time.perf_counter()  
+execution_time = end_time - start_time
+print(f"valid execution time: {execution_time:.9f} seconds")
